@@ -204,22 +204,19 @@ void printSudoku(vector<string>& sudoku)
 
 bool isSudokuSolven(vector<string>& sudoku)
 {
-	string row = "123456789";
-	bool isNumberMet[9] = { 0 };
+	int sumRow = 0;
+	int sumCol = 0;
 	for (int i = 0; i < 9; i++)
 	{
 		for (int j = 0; j < 9; j++)
 		{
-			for (int k = 0; k < 9; k++)
-			{
-				if (sudoku[i][j] == row[k])
-				{
-					if (isNumberMet[int(row[k] - 48)]) { return false; }
-					else { isNumberMet[int(row[k] - 48)] = true; }
-				}
-			}
-			
+			sumRow = sumRow + int(sudoku[i][j]) - 48;
+			sumCol = sumCol + int(sudoku[j][i]) - 48;
 		}
+		if (sumRow != 45) { return false; }
+		if (sumCol != 45) { return false; }
+		sumRow = 0;
+		sumCol = 0;
 	}
 	return true;
 }
