@@ -3,6 +3,8 @@
 #include<vector>
 
 using namespace std;
+//Constants
+const int NUMBER_FROM_LETTER = 48;
 //Prototypes
 void loadSudoku(ifstream&, char[10][9], char);
 void printSudoku(char[10][9]);
@@ -133,27 +135,49 @@ int main()
 
 	cout << "-------------------------------------------------------\n";
 	cout << "Rules:\n" << "Choose in which position to put new number:\n";
-	cout << "Rows and columns are from 0 to 8 and numbers are from 1 to 9\n";
-	cout << "(row) (column) (number) \n";
+	cout << "Row:(number between 1 and 9)\n";
+	cout << "Column:(number between 1 and 9) \n";
+	cout << "Number:(number between 1 and 9) \n";
 	cout << "Good luck!\n";
 	printSudoku(sudoku);
 
-	char row, col, num;
+	char consoleRow, consoleCol, consoleNum;
 	while (!isSudokuSolven(sudoku))
 	{
-		cin >> row;
+		cout << "Row:";
+		cin >> consoleRow;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cin >> col;
+		cout << "Column:";
+		cin >> consoleCol;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cin >> num;
+		cout << "Number:";
+		cin >> consoleNum;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-		if (row < '0' || row > '8' || col < '0' || col > '8' || num < '1' || num > '9')
+		int indexRow, indexCol;
+		indexRow = int(consoleRow - NUMBER_FROM_LETTER - 1);
+		indexCol = int(consoleCol - NUMBER_FROM_LETTER - 1);
+
+		if (indexRow < 0 || indexRow > 8 || indexCol < 0 || indexCol > 8 )
 		{
-			cout<<"INVA"
+			cout << "Invalid move! Please choose valid coordinates and number!\n";
+			continue;
 		}
-
-
+		if(consoleNum < '1' || consoleNum > '9')
+		{
+			cout << "Invalid move! Please choose valid coordinates and number!\n";
+			continue;
+		}
+		if (positions[indexRow][indexCol])
+		{
+			cout << "Invalid move! Please choose valid coordinates and number!\n";
+			continue;
+		}
+		else
+		{
+			sudoku[indexRow][indexCol] = consoleNum;
+		}
+		printSudoku(sudoku);
 
 	}
 	
@@ -228,8 +252,8 @@ bool isSudokuSolven(char sudoku[10][9])
 	{
 		for (int j = 0; j < 9; j++)
 		{
-			sumRow = sumRow + int(sudoku[i][j]) - 48;
-			sumCol = sumCol + int(sudoku[j][i]) - 48;
+			sumRow = sumRow + int(sudoku[i][j]) - NUMBER_FROM_LETTER;
+			sumCol = sumCol + int(sudoku[j][i]) - NUMBER_FROM_LETTER;
 		}
 		if (sumRow != 45) { return false; }
 		if (sumCol != 45) { return false; }
