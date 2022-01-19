@@ -1,5 +1,4 @@
 #include<iostream>
-#include<string>
 #include<fstream>
 #include<vector>
 
@@ -12,11 +11,7 @@ bool isSudokuSolven(vector<string>&);
 int main()
 {
 	ifstream input;
-	string consoleDifficulty;
-	string consoleSudokuNumber;
-	char difficulty;
-	char sudokuNumber[2];
-
+	char difficulty[2];
 
 	cout << "Hello, please select sudoku difficulty:\n";
 	cout << "| 1 - Easy | 2 - Medium | 3 - Hard | 4 - Very hard |\n";
@@ -26,46 +21,51 @@ int main()
 	bool f = true;
 	while (f)
 	{
-		cin >> consoleDifficulty;
-		difficulty = consoleDifficulty[0];
-		if (consoleDifficulty.size() != 1)
+		cin >> difficulty;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n'); //I stole it from internet and have no idea how it works, i know it clear the whole bufffer
+		
+		if (difficulty[1] == '\0') //Test for entering more than one digit, first of which could be valid difficulty
+		{
+			switch (difficulty[0])
+			{
+			case '1':
+			{
+				cout << "Chosen difficulty: Easy\n";
+				f = false;
+			}break;
+			case '2':
+			{
+				cout << "Chosen difficulty: Medium\n";
+				f = false;
+			}break;
+			case '3':
+			{
+				cout << "Chosen difficulty: Hard\n";
+				f = false;
+			}break;
+			case '4':
+			{
+				cout << "Chosen difficulty: Very hard\n";
+				f = false;
+			}break;
+			default:
+			{
+				cout << "Infalid difficuly!\n";
+				cout << "Please choose new difficulty:\n";
+			}
+			}
+		}
+		else
 		{
 			cout << "Infalid difficuly!\n";
 			cout << "Please choose new difficulty:\n";
-			continue;
-		}
-
-		switch (difficulty)
-		{
-		case '1':
-		{
-			cout << "Chosen difficulty: Easy\n";
-			f = false;
-		}break;
-		case '2':
-		{
-			cout << "Chosen difficulty: Medium\n";
-			f = false;
-		}break;
-		case '3':
-		{
-			cout << "Chosen difficulty: Hard\n";
-			f = false;
-		}break;
-		case '4':
-		{
-			cout << "Chosen difficulty: Very hard\n";
-			f = false;
-		}break;
-		default:
-		{
-			cout << "Infalid difficuly!\n";
-			cout << "Please choose new difficulty:\n";
-		}
 		}
 	}
 
 	cout << "-------------------------------------------------------\n";
+
+	char sudokuNumber[3];
+	sudokuNumber[2] = '\0';
 
 	cout << "Please, choose which sudoku you want to solve:\n";
 	cout << "| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n";
@@ -74,21 +74,22 @@ int main()
 	f = true;
 	while (f)
 	{
-		cin >> consoleSudokuNumber;
-		sudokuNumber[0] = consoleSudokuNumber[0];
-		sudokuNumber[1] = consoleSudokuNumber[1];
-		if (consoleSudokuNumber.size() > 2)
+		cin >> sudokuNumber;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+
+		if (sudokuNumber[2] != '\0')
 		{
 			cout << "Invalid number!\n";
 			cout << "Please choose new sudoku:\n";
 			continue;
 		}
-		if (int(sudokuNumber[0]) >= int('1') && int(sudokuNumber[0]) <= int('9') && sudokuNumber[1] == '\0')
+		if (sudokuNumber[0] >= '1' && sudokuNumber[0] <= '9' && sudokuNumber[1] == '\0')
 		{
-			cout << "Chosen sudoku: " << sudokuNumber << endl;
+			cout << "Chosen sudoku: " << sudokuNumber[0] << endl;
 			f = false;
 		}
-		else if (int(sudokuNumber[0]) == int('1') && int(sudokuNumber[1]) == int('0'))
+		else if (sudokuNumber[0] == '1' && sudokuNumber[1] == '0')
 		{
 			cout << "Chosen sudoku: " << sudokuNumber[0] << sudokuNumber[1] << endl;
 			f = false;
@@ -100,9 +101,8 @@ int main()
 		}
 
 	}
-
+	/*
 	cout << "-------------------------------------------------------\n";
-
 	//Input sudoku from the appropiate .dat file
 	vector<string> sudoku;
 	if (difficulty == '1')
@@ -141,7 +141,7 @@ int main()
 	cout << isSudokuSolven(sudoku1) << endl;;
 
 
-
+	*/
 
 	return 0;
 }
