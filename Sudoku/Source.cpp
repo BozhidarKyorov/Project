@@ -5,6 +5,7 @@
 using namespace std;
 //Constants
 const int NUMBER_FROM_LETTER = 48;
+const int KB_SIZE = 1024;
 //Prototypes
 void loadSudoku(ifstream&, char[10][9], char);
 void printSudoku(char[10][9]);
@@ -13,13 +14,15 @@ bool isSudokuSolven(char[10][9]);
 int main()
 {
 	ifstream input;
-	char difficulty[2];
+	bool f = true; //f states for 'flag'
+	
+	char difficulty[KB_SIZE];
 
 	cout << "Hello, please select sudoku difficulty:\n";
 	cout << "| 1 - Easy | 2 - Medium | 3 - Hard | 4 - Very hard |\n";
 
 	//Selection for diffiulty. Checking for choosing invalid difficulty
-	bool f = true;
+	
 	while (f)
 	{
 		cin >> difficulty;
@@ -65,7 +68,7 @@ int main()
 
 	cout << "-------------------------------------------------------\n";
 
-	char sudokuNumber[2];
+	char sudokuNumber[KB_SIZE];
 
 	cout << "Please, choose which sudoku you want to solve:\n";
 	cout << "| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n";
@@ -124,24 +127,32 @@ int main()
 	printSudoku(sudoku);
 
 	//Remembers the position of starting numbers
-	bool positions[9][9] = { false };
+	bool startingNumbersPositions[9][9] = { false };
 	for (int i = 0; i < 9; i++)
 	{
 		for (int j = 0; j < 9; j++)
 		{
-			if (sudoku[i][j] != '0') { positions[i][j] = true; }
+			if (sudoku[i][j] != '0') { startingNumbersPositions[i][j] = true; }
 		}
 	}
 
-	cout << "-------------------------------------------------------\n";
-	cout << "Rules:\n" << "Choose in which position to put new number:\n";
-	cout << "Row:(number between 1 and 9)\n";
-	cout << "Column:(number between 1 and 9) \n";
-	cout << "Number:(number between 1 and 9) \n";
-	cout << "Good luck!\n";
+	//Instructions 
+	{
+		cout << "-------------------------------------------------------\n";
+		cout << "Rules:\n";
+		cout << "Choose in which position to put new number.\n";
+		cout << "You should use each number once in every row,\ncolumn and 3x3 box.\n";
+		cout << "You cannot change the starting numbers.\n";
+		cout << "You can enter number like this:\n";
+		cout << "Row:(number between 1 and 9)\n";
+		cout << "Column:(number between 1 and 9) \n";
+		cout << "Number:(number between 1 and 9) \n";
+		cout << "Good luck!\n";
+	}
 	printSudoku(sudoku);
 
 	char consoleRow, consoleCol, consoleNum;
+	int indexRow, indexCol;
 	while (!isSudokuSolven(sudoku))
 	{
 		cout << "Row:";
@@ -154,29 +165,43 @@ int main()
 		cin >> consoleNum;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-		int indexRow, indexCol;
 		indexRow = int(consoleRow - NUMBER_FROM_LETTER - 1);
 		indexCol = int(consoleCol - NUMBER_FROM_LETTER - 1);
 
 		if (indexRow < 0 || indexRow > 8 || indexCol < 0 || indexCol > 8 )
 		{
-			cout << "Invalid move! Please choose valid coordinates and number!\n";
+			cout << "Invalid move! Please choose valid coordinates!\n";
 			continue;
 		}
 		if(consoleNum < '1' || consoleNum > '9')
 		{
-			cout << "Invalid move! Please choose valid coordinates and number!\n";
+			cout << "Invalid move! Please choose valid number!\n";
 			continue;
 		}
-		if (positions[indexRow][indexCol])
+		if (startingNumbersPositions[indexRow][indexCol])
 		{
-			cout << "Invalid move! Please choose valid coordinates and number!\n";
+			cout << "You cannot replace the starting numbers!\n";
 			continue;
 		}
-		else
+		f = true;
+		for (int i = 0; i < 9; i++)
 		{
-			sudoku[indexRow][indexCol] = consoleNum;
+			if (consoleNum == sudoku[indexRow][i])
+			{
+				cout << "You have " << consoleNum << " on row" << consoleRow << endl;
+				f = false;
+				break;
+			}
+			if (consoleNum == sudoku[i][indexCol])
+			{
+				cout << "You have " << consoleNum << " on row " << consoleRow << endl;
+				f = false;
+				break;
+			}
+			
 		}
+		
+		
 		printSudoku(sudoku);
 
 	}
