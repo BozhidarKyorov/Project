@@ -5,9 +5,8 @@
 using namespace std;
 //Prototypes
 void loadSudoku(ifstream&, char[10][9], char);
-//loadSudoku(ifstream&, char[10][9], char)
-//void printSudoku(vector<string>&);
-//bool isSudokuSolven(vector<string>&);
+void printSudoku(char[10][9]);
+bool isSudokuSolven(char[10][9]);
 
 int main()
 {
@@ -21,9 +20,9 @@ int main()
 	bool f = true;
 	while (f)
 	{
-		cin >> difficulty; 
+		cin >> difficulty;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n'); //I stole it from internet and have no idea how it works, i know it clear the whole bufffer
-		
+
 		if (difficulty[1] == '\0') //Test for entering more than one digit, first of which could be valid difficulty
 		{
 			switch (difficulty[0])
@@ -67,7 +66,7 @@ int main()
 	char sudokuNumber[2];
 
 	cout << "Please, choose which sudoku you want to solve:\n";
-cout << "| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n";
+	cout << "| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n";
 
 	//Selection for sudoku. Chekcing for choosing invalid number
 	f = true;
@@ -91,7 +90,7 @@ cout << "| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n";
 		}
 
 	}
-	
+
 	cout << "-------------------------------------------------------\n";
 	//Input sudoku from the appropiate .dat file
 	char sudoku[10][9];
@@ -120,11 +119,43 @@ cout << "| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n";
 		input.close();
 	}
 	cout << "Your sudoku:\n";
-	//printSudoku(sudoku);
+	printSudoku(sudoku);
 
-	
+	//Remembers the position of starting numbers
+	bool positions[9][9] = { false };
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			if (sudoku[i][j] != '0') { positions[i][j] = true; }
+		}
+	}
+
+	cout << "-------------------------------------------------------\n";
+	cout << "Rules:\n" << "Choose in which position to put new number:\n";
+	cout << "Rows and columns are from 0 to 8 and numbers are from 1 to 9\n";
+	cout << "(row) (column) (number) \n";
+	cout << "Good luck!\n";
+	printSudoku(sudoku);
+
+	char row, col, num;
+	while (!isSudokuSolven(sudoku))
+	{
+		cin >> row;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin >> col;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin >> num;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+		if (row < '0' || row > '8' || col < '0' || col > '8' || num < '1' || num > '9')
+		{
+			cout<<"INVA"
+		}
 
 
+
+	}
 	
 
 	return 0;
@@ -148,62 +179,62 @@ void loadSudoku(ifstream& input, char sudoku[10][9], char sudokuNumber)
 	}
 }
 
-//void printSudoku(vector<string>& sudoku)
-//{
-//	cout << char(201);
-//	for (int i = 0; i < 17; i++)
-//	{
-//		if (i % 6 == 5) { cout << char(203); }
-//		else { cout << char(205); }
-//	}
-//	cout << char(187) << endl;
-//
-//	for (int i = 0; i < 9; i++)
-//	{
-//		if (i % 3 == 0 && i != 0)
-//		{
-//			cout << char(204);
-//			for (int i = 0; i < 17; i++)
-//			{
-//				if (i % 6 == 5) { cout << char(206); }
-//				else { cout << char(205); }
-//			}
-//			cout << char(185);
-//			cout << endl;
-//		}
-//		cout << char(186);
-//
-//		for (int j = 0; j < 9; j++)
-//		{
-//			if (j % 3 == 2) { cout << sudoku[i][j] << char(186); }
-//			else { cout << sudoku[i][j] << " "; }
-//		}
-//		cout << endl;
-//	}
-//	cout << char(200);
-//	for (int i = 0; i < 17; i++)
-//	{
-//		if (i % 6 == 5) { cout << char(202); }
-//		else { cout << char(205); }
-//	}
-//	cout << char(188) << endl;
-//}
-//
-//bool isSudokuSolven(vector<string>& sudoku)
-//{
-//	int sumRow = 0;
-//	int sumCol = 0;
-//	for (int i = 0; i < 9; i++)
-//	{
-//		for (int j = 0; j < 9; j++)
-//		{
-//			sumRow = sumRow + int(sudoku[i][j]) - 48;
-//			sumCol = sumCol + int(sudoku[j][i]) - 48;
-//		}
-//		if (sumRow != 45) { return false; }
-//		if (sumCol != 45) { return false; }
-//		sumRow = 0;
-//		sumCol = 0;
-//	}
-//	return true;
-//}
+void printSudoku(char sudoku[10][9])
+{
+	cout << char(201);
+	for (int i = 0; i < 17; i++)
+	{
+		if (i % 6 == 5) { cout << char(203); }
+		else { cout << char(205); }
+	}
+	cout << char(187) << endl;
+
+	for (int i = 0; i < 9; i++)
+	{
+		if (i % 3 == 0 && i != 0)
+		{
+			cout << char(204);
+			for (int i = 0; i < 17; i++)
+			{
+				if (i % 6 == 5) { cout << char(206); }
+				else { cout << char(205); }
+			}
+			cout << char(185);
+			cout << endl;
+		}
+		cout << char(186);
+
+		for (int j = 0; j < 9; j++)
+		{
+			if (j % 3 == 2) { cout << sudoku[i][j] << char(186); }
+			else { cout << sudoku[i][j] << " "; }
+		}
+		cout << endl;
+	}
+	cout << char(200);
+	for (int i = 0; i < 17; i++)
+	{
+		if (i % 6 == 5) { cout << char(202); }
+		else { cout << char(205); }
+	}
+	cout << char(188) << endl;
+}
+
+bool isSudokuSolven(char sudoku[10][9])
+{
+	int sumRow = 0;
+	int sumCol = 0;
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			sumRow = sumRow + int(sudoku[i][j]) - 48;
+			sumCol = sumCol + int(sudoku[j][i]) - 48;
+		}
+		if (sumRow != 45) { return false; }
+		if (sumCol != 45) { return false; }
+		sumRow = 0;
+		sumCol = 0;
+	}
+	return true;
+}
