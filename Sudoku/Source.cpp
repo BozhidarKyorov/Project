@@ -1,28 +1,38 @@
+/**
+*
+* Solution to course project # 6
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2021/2022
+*
+* @author Bozhidar Kyorov
+* @idnumber 3MI0600075
+* @compiler vc
+*
+* <>
+*
+*/
 #include<iostream>
 #include<fstream>
-#include<vector>
+#include"Functions.h"
 
 using namespace std;
+
 //Constants
-const int NUMBER_FROM_LETTER = 48;
 const int KB_SIZE = 1024;
-//Prototypes
-void loadSudoku(ifstream&, char[10][9], char);
-void printSudoku(char[10][9]);
-bool isSudokuSolven(char[10][9]);
+
 
 int main()
 {
 	ifstream input;
-	bool f = true; //f states for 'flag'
+	bool f; //f states for 'flag'
 	
 	char difficulty[KB_SIZE];
-
 	cout << "Hello, please select sudoku difficulty:\n";
 	cout << "| 1 - Easy | 2 - Medium | 3 - Hard | 4 - Very hard |\n";
 
 	//Selection for diffiulty. Checking for choosing invalid difficulty
-	
+	f = true;
 	while (f)
 	{
 		cin >> difficulty;
@@ -69,7 +79,6 @@ int main()
 	cout << "-------------------------------------------------------\n";
 
 	char sudokuNumber[KB_SIZE];
-
 	cout << "Please, choose which sudoku you want to solve:\n";
 	cout << "| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n";
 
@@ -123,8 +132,6 @@ int main()
 		loadSudoku(input, sudoku, sudokuNumber[0]);
 		input.close();
 	}
-	cout << "Your sudoku:\n";
-	printSudoku(sudoku);
 
 	//Remembers the position of starting numbers
 	bool startingNumbersPositions[9][9] = { false };
@@ -136,19 +143,11 @@ int main()
 		}
 	}
 
-	//Instructions 
-	{
-		cout << "-------------------------------------------------------\n";
-		cout << "Rules:\n";
-		cout << "Choose in which position to put new number.\n";
-		cout << "You should use each number once in every row,\ncolumn and 3x3 box.\n";
-		cout << "You cannot change the starting numbers.\n";
-		cout << "You can enter number like this:\n";
-		cout << "Row:(number between 1 and 9)\n";
-		cout << "Column:(number between 1 and 9) \n";
-		cout << "Number:(number between 1 and 9) \n";
-		cout << "Good luck!\n";
-	}
+	//Instructions and rules
+	instructions();
+
+	cout << "-------------------------------------------------------\n";
+	cout << "Your sudoku:\n";
 	printSudoku(sudoku);
 
 	char consoleRow, consoleCol, consoleNum;
@@ -173,7 +172,7 @@ int main()
 			cout << "Invalid move! Please choose valid coordinates!\n";
 			continue;
 		}
-		if(consoleNum < '0' || consoleNum > '9')
+		if (!((consoleNum >= '1' && consoleNum <= '9') || consoleNum == 'x'))
 		{
 			cout << "Invalid move! Please choose valid number!\n";
 			continue;
@@ -194,12 +193,42 @@ int main()
 			}
 			else if (consoleNum == sudoku[i][indexCol])
 			{
-				cout << "You have " << consoleNum << " on row " << consoleRow << endl;
+				cout << "You have " << consoleNum << " on column " << consoleRow << endl;
 				f = false;
 				break;
 			}
 		}
-		if (f) { sudoku[indexRow][indexCol] = consoleNum; }
+		int boxNumber;
+		if (indexRow <= 2)
+		{
+			if (indexCol <= 2) { boxNumber = 1; }
+			else if (indexCol <= 5) { boxNumber = 2; }
+			else { boxNumber = 3; }
+		}
+		else if (indexRow <= 5)
+		{
+			if (indexCol <= 2) { boxNumber = 4; }
+			else if (indexCol <= 5) { boxNumber = 5; }
+			else { boxNumber = 6; }
+		}
+		else
+		{
+			if (indexCol <= 2) { boxNumber = 7; }
+			else if (indexCol <= 5) { boxNumber = 8; }
+			else { boxNumber = 9; }
+		}
+		if(!check3x3Box(sudoku, consoleNum, boxNumber))
+		{
+			cout << "You have " << consoleNum << " in box " << boxNumber << endl;
+			f = false;
+		}
+
+		if (f)
+		{
+			if (consoleNum == 'x') { sudoku[indexRow][indexCol] = '0'; }
+			else { sudoku[indexRow][indexCol] = consoleNum; }
+		
+		}
 		
 		
 		printSudoku(sudoku);
@@ -211,88 +240,3 @@ int main()
 	return 0;
 }
 
-void loadSudoku(ifstream& input, char sudoku[10][9], char sudokuNumber)
-{
-	char temp[10];
-	input >> temp;
-	while (temp[0] != sudokuNumber || temp[1] != 0)
-	{
-		input >> temp;
-	}
-	for (int i = 0; i < 9; i++)
-	{
-		input >> temp;
-		for (int j = 0; j < 9; j++)
-		{
-			sudoku[i][j] = temp[j];
-		}
-	}
-}
-
-void printSudoku(char sudoku[10][9])
-{
-	cout << char(201);
-	for (int i = 0; i < 17; i++)
-	{
-		if (i % 6 == 5) { cout << char(203); }
-		else { cout << char(205); }
-	}
-	cout << char(187) << endl;
-
-	for (int i = 0; i < 9; i++)
-	{
-		if (i % 3 == 0 && i != 0)
-		{
-			cout << char(204);
-			for (int i = 0; i < 17; i++)
-			{
-				if (i % 6 == 5) { cout << char(206); }
-				else { cout << char(205); }
-			}
-			cout << char(185);
-			cout << endl;
-		}
-		cout << char(186);
-
-		for (int j = 0; j < 9; j++)
-		{
-			if (j % 3 == 2)
-			{
-				if (sudoku[i][j] != '0') { cout << sudoku[i][j] << char(186); }
-				else { cout << " " << char(186); }
-			}
-			else 
-			{ 
-				if (sudoku[i][j] != '0') { cout << sudoku[i][j] << " "; }
-				else { cout << " " << " "; }
-			}
-		}
-		cout << endl;
-	}
-	cout << char(200);
-	for (int i = 0; i < 17; i++)
-	{
-		if (i % 6 == 5) { cout << char(202); }
-		else { cout << char(205); }
-	}
-	cout << char(188) << endl;
-}
-
-bool isSudokuSolven(char sudoku[10][9])
-{
-	int sumRow = 0;
-	int sumCol = 0;
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = 0; j < 9; j++)
-		{
-			sumRow = sumRow + int(sudoku[i][j]) - NUMBER_FROM_LETTER;
-			sumCol = sumCol + int(sudoku[j][i]) - NUMBER_FROM_LETTER;
-		}
-		if (sumRow != 45) { return false; }
-		if (sumCol != 45) { return false; }
-		sumRow = 0;
-		sumCol = 0;
-	}
-	return true;
-}
