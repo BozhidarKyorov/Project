@@ -173,7 +173,7 @@ int main()
 			cout << "Invalid move! Please choose valid coordinates!\n";
 			continue;
 		}
-		if(consoleNum < '1' || consoleNum > '9')
+		if(consoleNum < '0' || consoleNum > '9')
 		{
 			cout << "Invalid move! Please choose valid number!\n";
 			continue;
@@ -188,23 +188,24 @@ int main()
 		{
 			if (consoleNum == sudoku[indexRow][i])
 			{
-				cout << "You have " << consoleNum << " on row" << consoleRow << endl;
+				cout << "You have " << consoleNum << " on row " << consoleRow << endl;
 				f = false;
 				break;
 			}
-			if (consoleNum == sudoku[i][indexCol])
+			else if (consoleNum == sudoku[i][indexCol])
 			{
 				cout << "You have " << consoleNum << " on row " << consoleRow << endl;
 				f = false;
 				break;
 			}
-			
 		}
+		if (f) { sudoku[indexRow][indexCol] = consoleNum; }
 		
 		
 		printSudoku(sudoku);
 
 	}
+	cout << "SOLVEN!" << endl;
 	
 
 	return 0;
@@ -255,8 +256,16 @@ void printSudoku(char sudoku[10][9])
 
 		for (int j = 0; j < 9; j++)
 		{
-			if (j % 3 == 2) { cout << sudoku[i][j] << char(186); }
-			else { cout << sudoku[i][j] << " "; }
+			if (j % 3 == 2)
+			{
+				if (sudoku[i][j] != '0') { cout << sudoku[i][j] << char(186); }
+				else { cout << " " << char(186); }
+			}
+			else 
+			{ 
+				if (sudoku[i][j] != '0') { cout << sudoku[i][j] << " "; }
+				else { cout << " " << " "; }
+			}
 		}
 		cout << endl;
 	}
