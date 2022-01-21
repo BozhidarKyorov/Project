@@ -8,12 +8,13 @@ void instructions()
 	std::cout << "Rules:\n";
 	std::cout << "Choose in which position to put new number.\n";
 	std::cout << "You should use each number once in every row, column and 3x3 box.\n";
-	std::cout << "You can delete number you have written with 'x' on the number place.\n";
+	std::cout << "You can delete number by entering 'x' on the number place.\n";
+	std::cout << "You can give up by entering 'q' on the number place.\n";
 	std::cout << "You cannot change the starting numbers.\n";
 	std::cout << "You can enter number like this:\n";
 	std::cout << "Row:(number between 1 and 9)\n";
 	std::cout << "Column:(number between 1 and 9) \n";
-	std::cout << "Number:(number between 1 and 9) \n";
+	std::cout << "Number:(number between 1 and 9 or x) \n";
 	std::cout << "Good luck!\n";
 }
 

@@ -96,6 +96,11 @@ int main()
 				cout << "Chosen sudoku: " << sudokuNumber[0] << endl;
 				f = false;
 			}
+			else
+			{
+				cout << "Invalid number!\n";
+				cout << "Please choose new sudoku:\n";
+			}
 		}
 		else
 		{
@@ -150,7 +155,7 @@ int main()
 	cout << "Your sudoku:\n";
 	printSudoku(sudoku);
 
-	char consoleRow, consoleCol, consoleNum;
+	char consoleRow[KB_SIZE], consoleCol[KB_SIZE], consoleNum[KB_SIZE];
 	int indexRow, indexCol;
 	while (!isSudokuSolven(sudoku))
 	{
@@ -164,19 +169,40 @@ int main()
 		cin >> consoleNum;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-		indexRow = int(consoleRow - NUMBER_FROM_LETTER - 1);
-		indexCol = int(consoleCol - NUMBER_FROM_LETTER - 1);
+		indexRow = int(consoleRow[0]) - NUMBER_FROM_LETTER - 1;
+		indexCol = int(consoleCol[0]) - NUMBER_FROM_LETTER - 1;
 
-		if (indexRow < 0 || indexRow > 8 || indexCol < 0 || indexCol > 8 )
+		//Conditions for wrong input for coordiantes and number
+		if (consoleRow[1] != '\0' || consoleCol[1] != '\0')
 		{
 			cout << "Invalid move! Please choose valid coordinates!\n";
 			continue;
 		}
-		if (!((consoleNum >= '1' && consoleNum <= '9') || consoleNum == 'x'))
+		if (consoleNum[1] != '\0')
 		{
 			cout << "Invalid move! Please choose valid number!\n";
 			continue;
 		}
+		if (indexRow < 0 || indexRow > 8 || indexCol < 0 || indexCol > 8)
+		{
+			cout << "Invalid move! Please choose valid coordinates!\n";
+			continue;
+		}
+		if (!((consoleNum[0] >= '1' && consoleNum[0] <= '9') || consoleNum[0] == 'x' || consoleNum[0] == 'q'))
+		{
+			cout << "Invalid move! Please choose valid number!\n";
+			continue;
+		}
+		
+		/*if (consoleNum[0] == 'q')
+		{
+			char giveUp[KB_SIZE];
+			cout << "Are you sure you want to give up?\n";
+			cout << "(enter 'y' for yes or 'n' for no)\n";
+
+		}*/
+
+
 		if (startingNumbersPositions[indexRow][indexCol])
 		{
 			cout << "You cannot replace the starting numbers!\n";
@@ -185,15 +211,15 @@ int main()
 		f = true;
 		for (int i = 0; i < 9; i++)
 		{
-			if (consoleNum == sudoku[indexRow][i])
+			if (consoleNum[0] == sudoku[indexRow][i])
 			{
-				cout << "You have " << consoleNum << " on row " << consoleRow << endl;
+				cout << "You have " << consoleNum << " on row " << consoleRow << "!\n";
 				f = false;
 				break;
 			}
-			else if (consoleNum == sudoku[i][indexCol])
+			else if (consoleNum[0] == sudoku[i][indexCol])
 			{
-				cout << "You have " << consoleNum << " on column " << consoleRow << endl;
+				cout << "You have " << consoleNum << " on column " << consoleRow << "!\n";
 				f = false;
 				break;
 			}
@@ -217,26 +243,24 @@ int main()
 			else if (indexCol <= 5) { boxNumber = 8; }
 			else { boxNumber = 9; }
 		}
-		if(!check3x3Box(sudoku, consoleNum, boxNumber))
+		if(!check3x3Box(sudoku, consoleNum[0], boxNumber))
 		{
-			cout << "You have " << consoleNum << " in box " << boxNumber << endl;
+			cout << "You have " << consoleNum << " in box " << boxNumber << "!\n";
 			f = false;
 		}
 
 		if (f)
 		{
-			if (consoleNum == 'x') { sudoku[indexRow][indexCol] = '0'; }
-			else { sudoku[indexRow][indexCol] = consoleNum; }
+			if (consoleNum[0] == 'x') { sudoku[indexRow][indexCol] = '0'; }
+			else { sudoku[indexRow][indexCol] = consoleNum[0]; }
 		
 		}
-		
-		
+	
 		printSudoku(sudoku);
 
 	}
 	cout << "SOLVEN!" << endl;
 	
-
 	return 0;
 }
 
