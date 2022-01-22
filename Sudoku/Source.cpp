@@ -157,7 +157,7 @@ int main()
 
 	char consoleRow[KB_SIZE], consoleCol[KB_SIZE], consoleNum[KB_SIZE];
 	int indexRow, indexCol;
-	while (!isSudokuSolven(sudoku))
+	while (!isSudokuSolved(sudoku))
 	{
 		cout << "Row:";
 		cin >> consoleRow;
@@ -291,7 +291,7 @@ int main()
 		printSudoku(sudoku);
 
 	}
-	if(isSudokuSolven(sudoku)) cout << "SOLVEN!" << endl;
+	if(isSudokuSolved(sudoku)) cout << "SOLVED!" << endl;
 	else
 	{
 		cout << "Nice try! Better luck next time!\n";

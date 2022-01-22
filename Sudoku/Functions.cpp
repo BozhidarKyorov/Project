@@ -14,7 +14,7 @@ void instructions()
 	std::cout << "You can enter number like this:\n";
 	std::cout << "Row:(number between 1 and 9)\n";
 	std::cout << "Column:(number between 1 and 9) \n";
-	std::cout << "Number:(number between 1 and 9 or x) \n";
+	std::cout << "Number:(number between 1 and 9 or x or q) \n";
 	std::cout << "Good luck!\n";
 }
 
@@ -85,7 +85,7 @@ void printSudoku(char sudoku[10][9])
 	std::cout << char(188) << std::endl;
 }
 
-bool isSudokuSolven(char sudoku[10][9])
+bool isSudokuSolved(char sudoku[10][9])
 {
 	int sumRow = 0;
 	int sumCol = 0;
