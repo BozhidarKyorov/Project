@@ -9,7 +9,7 @@
 * @idnumber 3MI0600075
 * @compiler vc
 *
-* <>
+* Main body of the game
 *
 */
 #include<iostream>
