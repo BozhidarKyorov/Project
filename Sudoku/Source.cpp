@@ -194,13 +194,45 @@ int main()
 			continue;
 		}
 		
-		/*if (consoleNum[0] == 'q')
+		//Option to quit
+		if (consoleNum[0] == 'q')
 		{
 			char giveUp[KB_SIZE];
 			cout << "Are you sure you want to give up?\n";
 			cout << "(enter 'y' for yes or 'n' for no)\n";
+			cin >> giveUp;
+			f = true;
+			while (true)
+			{
+				if (giveUp[1] != '\0')
+				{
+					cout << "Invalid choice! Enter 'y' for yes or 'n' for no\n";
+					cin >> giveUp;
+				}
+				else if (!(giveUp[0] == 'y' || giveUp[0] == 'n'))
+				{
+					cout << "Invalid choice! Enter 'y' for yes or 'n' for no\n";
+					cin >> giveUp;
+				}
+				else if (giveUp[0] == 'y')
+				{
+					f = true;
+					break;
+				}
+				else if (giveUp[0] == 'n')
+				{
+					f = false;
+					break;
+				}
+			}
 
-		}*/
+			if (f) { break; }
+			else 
+			{ 
+				printSudoku(sudoku);
+				continue; 
+			}
+		}
 
 
 		if (startingNumbersPositions[indexRow][indexCol])
@@ -259,7 +291,11 @@ int main()
 		printSudoku(sudoku);
 
 	}
-	cout << "SOLVEN!" << endl;
+	if(isSudokuSolven(sudoku)) cout << "SOLVEN!" << endl;
+	else
+	{
+		cout << "Nice try! Better luck next time!\n";
+	}
 	
 	return 0;
 }
